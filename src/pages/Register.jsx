@@ -1,12 +1,31 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router";
+import { auth } from "../firebase/firebase.init";
 
 const Register = () => {
+  const handleRegister = (event) => {
+    event.preventDefault();
+    const name = event.target.name.value;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    console.log(name, email, password);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  };
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl pt-10">
       <div className="card-body">
         <h1 className="text-2xl font-bold">Register Now!</h1>
-        <form>
+        <form onSubmit={handleRegister}>
           <fieldset className="fieldset">
+            <label className="label">Name</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Name"
+              name="name"
+            />
             <label className="label">Email</label>
             <input
               type="email"
