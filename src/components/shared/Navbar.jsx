@@ -3,8 +3,13 @@ import { NavLink } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
-  const { user } = use(AuthContext);
-  console.log(user);
+  const { user, signOutUser } = use(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {})
+      .catch();
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -78,11 +83,29 @@ const Navbar = () => {
               Register
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/orders"
+              className={({ isActive }) => (isActive ? "text-green-600" : "")}
+            >
+              Orders
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => (isActive ? "text-green-600" : "")}
+            >
+              Profile
+            </NavLink>
+          </li>
         </ul>
       </div>
       <div className="navbar-end">
         {user ? (
-          <button className="btn btn-warning"> Logout</button>
+          <button onClick={handleSignOut} className="btn btn-warning">
+            Logout
+          </button>
         ) : (
           <NavLink to="/login" className="btn bg-green-500 text-white">
             Login

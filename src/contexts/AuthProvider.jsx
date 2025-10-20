@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.init";
@@ -9,37 +10,42 @@ import { AuthContext } from "./AuthContext";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const createUser = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  //   signInuser
   const signInUser = (email, password) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  //   Get the currently signed-in user
-  useEffect(() => {
-    // mount the observer
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        console.log(currentUser);
-      }
-    });
-
-    // clear the observer
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const signOutUser = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
 
   const authInfo = {
     user,
+    loading,
     createUser,
     signInUser,
+    signOutUser,
   };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // ✅ FIXED: Use AuthContext.Provider
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };
 
