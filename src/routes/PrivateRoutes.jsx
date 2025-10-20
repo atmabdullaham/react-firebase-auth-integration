@@ -5,6 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 const PrivateRoutes = ({ children }) => {
   const { user, loading } = use(AuthContext);
   const location = useLocation();
+  console.log(location);
 
   if (loading) {
     return <span className="loading loading-spinner loading-xl"></span>;
@@ -15,7 +16,7 @@ const PrivateRoutes = ({ children }) => {
   }
 
   // ✅ 'replace' prevents back navigation to protected route
-  return <Navigate to="/login" replace />;
+  return <Navigate state={location?.pathname} to="/login" replace />;
 };
 
 export default PrivateRoutes;
