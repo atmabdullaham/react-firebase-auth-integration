@@ -61,6 +61,7 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
+
           <li>
             <NavLink
               to="/login"
@@ -80,7 +81,13 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <button className="btn btn-warning"> Logout</button>
+        ) : (
+          <NavLink to="/login" className="btn bg-green-500 text-white">
+            Login
+          </NavLink>
+        )}
       </div>
     </div>
   );
